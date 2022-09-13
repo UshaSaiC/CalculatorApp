@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     // below variable can now be used within this class
     private var isFinishedTyping: Bool = true
     
+    
     private var displayValue: Double{
         get{
             guard let number = Double(displayLabel.text!) else{
@@ -36,16 +37,11 @@ class ViewController: UIViewController {
     isFinishedTyping = true
         
         if let calculationMethod = sender.currentTitle{
-            switch calculationMethod{
-            case "+/-":
-                displayValue = displayValue * -1
-            case "AC":
-                displayValue = 0
-            case "%":
-                displayValue = displayValue * 0.01
-            default:
-                print("else where")
+            let calculatorBrain = CalculatorBrain(number: displayValue)
+            guard let result = calculatorBrain.calculation(symbol: calculationMethod) else{
+                fatalError("result of calculation is  nil")
             }
+                    displayValue = result
         }
         
     }
