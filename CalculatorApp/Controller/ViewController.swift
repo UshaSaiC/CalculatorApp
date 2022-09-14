@@ -32,16 +32,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
 
-
+    private var calculatorBrain = CalculatorBrain()
+    
     @IBAction func calculationButtonPressed(_ sender: UIButton) {
     isFinishedTyping = true
-        
+        calculatorBrain.setNumber(displayValue)
         if let calculationMethod = sender.currentTitle{
-            let calculatorBrain = CalculatorBrain(number: displayValue)
-            guard let result = calculatorBrain.calculation(symbol: calculationMethod) else{
-                fatalError("result of calculation is  nil")
-            }
+            if let result = calculatorBrain.calculation(symbol: calculationMethod) {
                     displayValue = result
+            }
         }
         
     }

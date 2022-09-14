@@ -9,23 +9,49 @@ import Foundation
 
 struct CalculatorBrain{
     
-    var number: Double
+    private var number: Double?
     
-    init(number: Double){
+    private var intermediateCalculation: (symbol: String, value: Double)? // making entire tuple optional
+    
+    mutating func setNumber(_ number: Double){
         self.number = number
     }
     
-    func calculation(symbol: String) -> Double? {
+    mutating func calculation(symbol: String) -> Double? {
+        if let n=number{
             switch symbol{
             case "+/-":
-                return number * -1
+                return n * -1
             case "AC":
                 return 0
             case "%":
-                return number * 0.01
+                return n * 0.01
+            case "=":
+                return performTwoNumberCalculation(secondNumber: n)
             default:
-                return nil
+                intermediateCalculation = (symbol: symbol, value: n)
             }
+        }
         return nil
     }
+    
+    private func performTwoNumberCalculation(secondNumber: Double) -> Double?{
+        if let firstNumber = intermediateCalculation?.value,
+            let operation = intermediateCalculation?.symbol {
+            switch operation{
+            case "+":
+                return firstNumber+secondNumber
+            case "-":
+                return firstNumber-secondNumber
+            case "*":
+                return firstNumber*secondNumber
+            case "/":
+                return firstNumber/secondNumber
+            default:
+                fatalError("The operation passed in does not match any of the cases.")
+            }
+        }
+        return nil
+    }
+
 }
